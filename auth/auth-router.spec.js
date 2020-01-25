@@ -31,4 +31,6 @@ test("POST /login - login user route", async () => {
 
   // does it return the expected data?
   expect(res.body.message).toMatch(/successfully logged in/i);
+  expect(res.body.user).toBe(1);
+  expect(res.body.token).not.toBeNull();
 });

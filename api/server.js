@@ -15,6 +15,12 @@ server.use(express.json());
 server.use("/api/auth", authRouter);
 server.use("/api/jokes", authenticate, jokesRouter);
 
+server.get("/", (req, res, next) => {
+  res.json({
+    message: "Welcome to the Dad zone"
+  });
+});
+
 server.use((req, res) => {
   res.status(404).json({
     message: "Route was not found"

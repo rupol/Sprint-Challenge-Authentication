@@ -6,7 +6,7 @@ const secrets = require("../config/secrets");
 
 const router = require("express").Router();
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", validateUser, async (req, res, next) => {
   // implement registration
   try {
     const user = await usersModel.add(req.body);
@@ -16,7 +16,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", validateUser, async (req, res, next) => {
   // implement login
   try {
     const { username, password } = req.body;
@@ -54,6 +54,17 @@ function signToken(user) {
   };
 
   return jwt.sign(payload, secret, options);
+}
+
+function validateUser(req, res, next) {
+  if (!req.body) {
+    return res.status(400).json({ message: "missing user data" });
+  } else if (!req.body.username) {
+    return res.status(400).json({ message: "missing required username field" });
+  } else if (!req.body.password) {
+    return res.status(400).json({ message: "missing required password field" });
+  }
+  next();
 }
 
 module.exports = router;
